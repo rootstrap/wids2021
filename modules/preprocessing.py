@@ -12,7 +12,6 @@ class PreprocessingModule():
       return bool(pattern.match(str(column)))
 
   def df_preprocessing(self, df, disable_h1=False, disable_d1=False, null_tolerance=100, columns_to_keep=[]):
-    
     if len(columns_to_keep) > 0:
         drop_columns = [column for column in df.columns if column not in columns_to_keep]
         df.drop(drop_columns, axis=1, inplace=True)
@@ -26,7 +25,7 @@ class PreprocessingModule():
         for column in columns:
             total_nulls = df[column].isnull().sum()
             nulls_percentage = (total_nulls*100)/df.shape[0]
-            if (disable_h1 and is_h1(column)) or (disable_d1 and is_d1(column)) or (null_tolerance <= nulls_percentage):
+            if (disable_h1 and self.is_h1(column)) or (disable_d1 and self.is_d1(column)) or (null_tolerance <= nulls_percentage):
                 df.drop(column, axis=1, inplace=True)
 
     # Filling by mean
@@ -43,7 +42,8 @@ class PreprocessingModule():
     #          h1_pao2fio2ratio_min
     mean_columns = 'albumin_apache bilirubin_apache glucose_apache hematocrit_apache sodium_apache urineoutput_apache d1_diasbp_invasive_max d1_diasbp_invasive_min d1_diasbp_max d1_diasbp_min d1_diasbp_noninvasive_max d1_diasbp_noninvasive_min d1_mbp_invasive_max d1_mbp_invasive_min d1_mbp_noninvasive_max d1_mbp_noninvasive_min h1_mbp_invasive_max h1_mbp_invasive_min d1_albumin_max d1_albumin_min d1_bilirubin_max d1_bilirubin_min d1_calcium_max d1_calcium_min d1_glucose_max d1_glucose_min d1_hco3_max d1_hco3_min d1_hemaglobin_max d1_hemaglobin_min d1_hematocrit_max d1_hematocrit_min h1_albumin_max h1_albumin_min h1_bilirubin_max h1_bilirubin_min h1_calcium_max h1_calcium_min h1_glucose_max h1_glucose_min h1_hco3_max h1_hco3_min h1_hemaglobin_max h1_hemaglobin_min h1_hematocrit_max h1_hematocrit_min h1_sodium_max h1_sodium_min d1_arterial_pco2_max d1_arterial_pco2_min d1_arterial_ph_max d1_arterial_ph_min d1_arterial_po2_max d1_arterial_po2_min d1_pao2fio2ratio_max d1_pao2fio2ratio_min h1_arterial_pco2_max h1_arterial_pco2_min h1_arterial_ph_max h1_arterial_ph_min h1_arterial_po2_max h1_arterial_po2_min h1_pao2fio2ratio_max h1_pao2fio2ratio_min'.split(' ')
     for column in mean_columns:
-      df[column].fillna((df[column].mean()), inplace=True)
+      if column in df.columns:
+        df[column].fillna((df[column].mean()), inplace=True)
 
 
     # Filling by mfv
@@ -62,7 +62,8 @@ class PreprocessingModule():
     #          h1_wbc_max h1_wbc_min aids cirrhosis hepatic_failure immunosuppression leukemia lymphoma solid_tumor_with_metastasis
     mfv_columns = 'bun_apache creatinine_apache fio2_apache gcs_eyes_apache gcs_motor_apache gcs_unable_apache gcs_verbal_apache map_apache paco2_apache paco2_for_ph_apache paco2_for_ph_apache pao2_apache ph_apache heart_rate_apache temp_apache d1_mbp_max d1_mbp_min wbc_apache d1_heartrate_max d1_heartrate_min d1_heartrate_max d1_heartrate_min d1_resprate_max d1_resprate_min d1_spo2_max d1_spo2_min d1_sysbp_invasive_max d1_sysbp_invasive_min d1_sysbp_max d1_sysbp_min d1_sysbp_noninvasive_max d1_sysbp_noninvasive_min d1_temp_max d1_temp_min h1_diasbp_invasive_max h1_diasbp_invasive_min h1_diasbp_max h1_diasbp_min h1_diasbp_noninvasive_max h1_diasbp_noninvasive_min h1_heartrate_max h1_heartrate_min h1_mbp_max h1_mbp_min h1_mbp_noninvasive_max h1_mbp_noninvasive_min h1_resprate_max h1_resprate_min h1_spo2_max h1_spo2_min h1_sysbp_invasive_max h1_sysbp_invasive_min h1_sysbp_max h1_sysbp_min h1_sysbp_noninvasive_max h1_sysbp_noninvasive_min h1_temp_max h1_temp_min d1_bun_max d1_bun_min d1_creatinine_max d1_creatinine_min d1_inr_max d1_inr_min d1_lactate_max d1_lactate_min d1_platelets_max d1_platelets_min d1_potassium_max d1_potassium_min d1_sodium_max d1_sodium_min d1_wbc_max d1_wbc_min h1_bun_max h1_bun_min h1_creatinine_max h1_creatinine_min h1_inr_max h1_inr_min h1_lactate_max h1_lactate_min h1_platelets_max h1_platelets_min h1_potassium_max h1_potassium_min h1_wbc_max h1_wbc_min aids cirrhosis hepatic_failure immunosuppression leukemia lymphoma solid_tumor_with_metastasis'.split(' ')
     for column in mfv_columns:
-      df[column].fillna((df[column].mode().iloc[0]), inplace=True)
+      if column in df.columns:
+        df[column].fillna((df[column].mode().iloc[0]), inplace=True)
 
 
 
@@ -106,7 +107,8 @@ class PreprocessingModule():
     df['resprate_apache'].fillna(lambda x: random.randint(12, 16), inplace =True)
 
     # urineoutput_apache - Normal Value
-    df['urineoutput_apache'].fillna(lambda x: random.randint(1200, 1800), inplace =True)
+    if 'urineoutput_apache' in df.columns:
+      df['urineoutput_apache'].fillna(lambda x: random.randint(1200, 1800), inplace =True)
 
 
     # High correlations
