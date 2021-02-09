@@ -30,8 +30,8 @@ class PlottingModule():
     auc_train = roc_auc_score(y_train, df_train_pred['predicted_value'])
     auc_val = roc_auc_score(y_val, df_val_pred['predicted_value'])
 
-    print('Train prevalence:%.3f'%calc_prevalence(y_train))
-    print('Valid prevalence:%.3f'%calc_prevalence(y_val))
+    print('Train prevalence:%.3f'%self.calc_prevalence(y_train))
+    print('Valid prevalence:%.3f'%self.calc_prevalence(y_val))
 
     print('Train AUC:%.3f'%auc_train)
     print('Valid AUC:%.3f'%auc_val)
@@ -45,8 +45,8 @@ class PlottingModule():
     print('Train precision:%.3f'%precision_score(y_train, df_train_pred['predicted_value']>= threshold))
     print('Valid precision:%.3f'%precision_score(y_val, df_val_pred['predicted_value']>= threshold))
 
-    print('Train specificity:%.3f'%calc_specificity(y_train, df_train_pred['predicted_value'], threshold))
-    print('Valid specificity:%.3f'%calc_specificity(y_val, df_val_pred['predicted_value'], threshold))
+    print('Train specificity:%.3f'%self.calc_specificity(y_train, df_train_pred['predicted_value'], threshold))
+    print('Valid specificity:%.3f'%self.calc_specificity(y_val, df_val_pred['predicted_value'], threshold))
 
     plt.plot(fpr_train, tpr_train,'r-', label = 'Train AUC: %.2f'%auc_train)
     plt.plot(fpr_val, tpr_val,'b-',label = 'Valid AUC: %.2f'%auc_val)
