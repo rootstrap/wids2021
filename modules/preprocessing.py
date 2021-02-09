@@ -11,7 +11,7 @@ class PreprocessingModule():
       pattern = re.compile("d1*")
       return bool(pattern.match(str(column)))
 
-  def df_preprocessing(self, df, disable_h1=False, disable_d1=False, null_tolerance=100, columns_to_keep=[]):
+  def df_preprocessing(self, df, disable_h1=False, disable_d1=False, null_tolerance=100, onehot=False, columns_to_keep=[]):
     if len(columns_to_keep) > 0:
         drop_columns = [column for column in df.columns if column not in columns_to_keep]
         df.drop(drop_columns, axis=1, inplace=True)
@@ -91,9 +91,10 @@ class PreprocessingModule():
     # Fill ethnicity - proportion distribution? + OneHot
     proportion = df['ethnicity'].value_counts(normalize=True)
     df['ethnicity'] = df['ethnicity'].fillna(pd.Series(np.random.choice(proportion.keys(), p=proportion.values, size=len(df))))
-    one_hot = pd.get_dummies(df['ethnicity'])
-    df = df.drop('ethnicity',axis = 1)
-    df = df.join(one_hot)
+    if (onehot):
+        one_hot = pd.get_dummies(df['ethnicity'])
+        df = df.drop('ethnicity',axis = 1)
+        df = df.join(one_hot)
     # change OHE, change nulls for unknown
 
     # gender - fill by proportion
