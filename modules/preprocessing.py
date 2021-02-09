@@ -101,16 +101,15 @@ class PreprocessingModule():
     df['gender'] = df['gender'].fillna(pd.Series(np.random.choice(['M', 'F'], p=[0.5, 0.5], size=len(df))))
 
     # apache_3j_diagnosis - Normal Value in Range
-    df['apache_3j_diagnosis'].fillna(lambda x: random.randint(100, 200), inplace =True)
+    df['apache_3j_diagnosis'].fillna(random.randint(100, 200), inplace =True)
 
     # resprate_apache - Normal Value in Range
-    df['resprate_apache'].fillna(lambda x: random.randint(12, 16), inplace =True)
+    df['resprate_apache'].fillna(random.randint(12, 16), inplace =True)
 
     # urineoutput_apache - Normal Value
     if 'urineoutput_apache' in df.columns:
       df['urineoutput_apache'].fillna(lambda x: random.randint(1200, 1800), inplace =True)
-
-
+  
     # High correlations
     # bun_apache - Highly correlated (>0.9) removing d1, h1 ?
     # df = df.drop(['d1_bun_min', 'd1_bun_max', 'h1_bun_min', 'h1_bun_max'], axis=1)
