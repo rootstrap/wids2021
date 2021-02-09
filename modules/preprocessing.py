@@ -91,14 +91,21 @@ class PreprocessingModule():
     # Fill ethnicity - proportion distribution? + OneHot
     proportion = df['ethnicity'].value_counts(normalize=True)
     df['ethnicity'] = df['ethnicity'].fillna(pd.Series(np.random.choice(proportion.keys(), p=proportion.values, size=len(df))))
-    if (onehot):
-        one_hot = pd.get_dummies(df['ethnicity'])
-        df = df.drop('ethnicity',axis = 1)
-        df = df.join(one_hot)
+
     # change OHE, change nulls for unknown
 
     # gender - fill by proportion
     df['gender'] = df['gender'].fillna(pd.Series(np.random.choice(['M', 'F'], p=[0.5, 0.5], size=len(df))))
+    if (onehot):
+        one_hot = pd.get_dummies(df['ethnicity'], drop_first=True)
+        df = df.drop('ethnicity',axis = 1)
+        df = df.join(one_hot)
+        one_hot = pd.get_dummies(df['gender'], drop_first=True)
+        df = df.drop('ethnicity',axis = 1)
+        df = df.join(one_hot)
+    else:
+        df['ethnicity'] = df['ethnicity'].astype('category')
+        df['gender'] = df['gender'].astype('category')
 
     # apache_3j_diagnosis - Normal Value in Range
     df['apache_3j_diagnosis'].fillna(random.randint(100, 200), inplace =True)
