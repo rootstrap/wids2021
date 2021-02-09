@@ -1,4 +1,5 @@
 from sklearn.model_selection import train_test_split
+import pandas as pd 
 
 class PredictingModule():
   def split_data(self, df, test_size=0.2, val_size=0.25):

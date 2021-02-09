@@ -17,12 +17,11 @@ class PreprocessingModule():
         df.drop(drop_columns, axis=1, inplace=True)
     else:
         # Dropping unused columns
-        df=df.drop(['Unnamed: 0', 'hospital_id', 'hospital_admit_source', 'icu_admit_source',
-                    'icu_id', 'icu_type', 'apache_2_diagnosis', 'weight', 'height', 'icu_stay_type'], axis = 1)
+        df.drop(['Unnamed: 0', 'hospital_id', 'hospital_admit_source', 'icu_admit_source',
+                    'icu_id', 'icu_type', 'apache_2_diagnosis', 'weight', 'height', 'icu_stay_type'], axis = 1, inplace=True)
 
         # Dropping by null %, d1, h1
-        columns = df.columns
-        for column in columns:
+        for column in df.columns:
             total_nulls = df[column].isnull().sum()
             nulls_percentage = (total_nulls*100)/df.shape[0]
             if (disable_h1 and self.is_h1(column)) or (disable_d1 and self.is_d1(column)) or (null_tolerance <= nulls_percentage):
