@@ -17,7 +17,7 @@ class PreprocessingModule():
         df.drop(drop_columns, axis=1, inplace=True)
     else:
         # Dropping unused columns
-        df=df.drop(['Unnamed: 0', 'encounter_id', 'hospital_id', 'hospital_admit_source', 'icu_admit_source',
+        df=df.drop(['Unnamed: 0', 'hospital_id', 'hospital_admit_source', 'icu_admit_source',
                     'icu_id', 'icu_type', 'apache_2_diagnosis', 'weight', 'height', 'icu_stay_type'], axis = 1)
 
         # Dropping by null %, d1, h1
