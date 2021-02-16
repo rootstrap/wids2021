@@ -87,6 +87,16 @@ class PreprocessingModule():
     ]
     choices=[df['bmi'], male_mean, female_mean]
     df['bmi'] = df['bmi'].fillna(pd.Series(np.select(conditions, choices, default=bmi_mean)))
+    male_mean = df.groupby('gender')['weight'].mean()['M']
+    female_mean = df.groupby('gender')['weight'].mean()['F']
+    conditions = [
+      df['weight'].notnull(),
+      df['gender']=='M',
+      df['gender']=='F',
+    ]
+    choices=[df['weight'], male_mean, female_mean]
+    weight_mean = df['bmi'].mean()
+    df['weight'] = df['weight'].fillna(pd.Series(np.select(conditions, choices, default=weight_mean)))
 
     # Fill ethnicity - proportion distribution? + OneHot
     proportion = df['ethnicity'].value_counts(normalize=True)
