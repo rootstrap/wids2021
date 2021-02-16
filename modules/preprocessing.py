@@ -11,14 +11,14 @@ class PreprocessingModule():
       pattern = re.compile("d1*")
       return bool(pattern.match(str(column)))
 
-  def df_preprocessing(self, df, disable_h1=False, disable_d1=False, null_tolerance=100, onehot=False, columns_to_keep=[]):
+  def df_preprocessing(self, df, disable_h1=False, disable_d1=False, null_tolerance=100, onehot=False, 
+    drop_columns=[], columns_to_keep=[]):
     if len(columns_to_keep) > 0:
         drop_columns = [column for column in df.columns if column not in columns_to_keep]
         df.drop(drop_columns, axis=1, inplace=True)
     else:
         # Dropping unused columns
-        df.drop(['Unnamed: 0', 'hospital_id', 'hospital_admit_source', 'icu_admit_source',
-                    'icu_id', 'icu_type', 'apache_2_diagnosis', 'weight', 'height', 'icu_stay_type'], axis = 1, inplace=True)
+        df.drop(drop_columns, axis = 1, inplace=True)
 
         # Dropping by null %, d1, h1
         for column in df.columns:
