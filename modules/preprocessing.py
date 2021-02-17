@@ -95,7 +95,7 @@ class PreprocessingModule():
       df['gender']=='F',
     ]
     choices=[df['weight'], male_mean, female_mean]
-    weight_mean = df['bmi'].mean()
+    weight_mean = df['weight'].mean()
     df['weight'] = df['weight'].fillna(pd.Series(np.select(conditions, choices, default=weight_mean)))
 
     # Fill ethnicity - proportion distribution? + OneHot
