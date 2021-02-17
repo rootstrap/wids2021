@@ -38,7 +38,7 @@ class PreprocessingModule():
     #          d1_arterial_po2_max d1_arterial_po2_min d1_pao2fio2ratio_max d1_pao2fio2ratio_min h1_arterial_pco2_max
     #          h1_arterial_pco2_min h1_arterial_ph_max h1_arterial_ph_min h1_arterial_po2_max h1_arterial_po2_min h1_pao2fio2ratio_max
     #          h1_pao2fio2ratio_min
-    mean_columns = 'apache_2_diagnosis albumin_apache bilirubin_apache glucose_apache hematocrit_apache sodium_apache urineoutput_apache d1_diasbp_invasive_max d1_diasbp_invasive_min d1_diasbp_max d1_diasbp_min d1_diasbp_noninvasive_max d1_diasbp_noninvasive_min d1_mbp_invasive_max d1_mbp_invasive_min d1_mbp_noninvasive_max d1_mbp_noninvasive_min h1_mbp_invasive_max h1_mbp_invasive_min d1_albumin_max d1_albumin_min d1_bilirubin_max d1_bilirubin_min d1_calcium_max d1_calcium_min d1_glucose_max d1_glucose_min d1_hco3_max d1_hco3_min d1_hemaglobin_max d1_hemaglobin_min d1_hematocrit_max d1_hematocrit_min h1_albumin_max h1_albumin_min h1_bilirubin_max h1_bilirubin_min h1_calcium_max h1_calcium_min h1_glucose_max h1_glucose_min h1_hco3_max h1_hco3_min h1_hemaglobin_max h1_hemaglobin_min h1_hematocrit_max h1_hematocrit_min h1_sodium_max h1_sodium_min d1_arterial_pco2_max d1_arterial_pco2_min d1_arterial_ph_max d1_arterial_ph_min d1_arterial_po2_max d1_arterial_po2_min d1_pao2fio2ratio_max d1_pao2fio2ratio_min h1_arterial_pco2_max h1_arterial_pco2_min h1_arterial_ph_max h1_arterial_ph_min h1_arterial_po2_max h1_arterial_po2_min h1_pao2fio2ratio_max h1_pao2fio2ratio_min'.split(' ')
+    mean_columns = 'albumin_apache bilirubin_apache glucose_apache hematocrit_apache sodium_apache urineoutput_apache d1_diasbp_invasive_max d1_diasbp_invasive_min d1_diasbp_max d1_diasbp_min d1_diasbp_noninvasive_max d1_diasbp_noninvasive_min d1_mbp_invasive_max d1_mbp_invasive_min d1_mbp_noninvasive_max d1_mbp_noninvasive_min h1_mbp_invasive_max h1_mbp_invasive_min d1_albumin_max d1_albumin_min d1_bilirubin_max d1_bilirubin_min d1_calcium_max d1_calcium_min d1_glucose_max d1_glucose_min d1_hco3_max d1_hco3_min d1_hemaglobin_max d1_hemaglobin_min d1_hematocrit_max d1_hematocrit_min h1_albumin_max h1_albumin_min h1_bilirubin_max h1_bilirubin_min h1_calcium_max h1_calcium_min h1_glucose_max h1_glucose_min h1_hco3_max h1_hco3_min h1_hemaglobin_max h1_hemaglobin_min h1_hematocrit_max h1_hematocrit_min h1_sodium_max h1_sodium_min d1_arterial_pco2_max d1_arterial_pco2_min d1_arterial_ph_max d1_arterial_ph_min d1_arterial_po2_max d1_arterial_po2_min d1_pao2fio2ratio_max d1_pao2fio2ratio_min h1_arterial_pco2_max h1_arterial_pco2_min h1_arterial_ph_max h1_arterial_ph_min h1_arterial_po2_max h1_arterial_po2_min h1_pao2fio2ratio_max h1_pao2fio2ratio_min'.split(' ')
     for column in mean_columns:
       if column in df.columns:
         df[column].fillna((df[column].mean()), inplace=True)
@@ -118,6 +118,7 @@ class PreprocessingModule():
 
     # apache_3j_diagnosis - Normal Value in Range
     df['apache_3j_diagnosis'].fillna(random.randint(100, 200), inplace =True)
+    df['apache_2_diagnosis'].fillna(random.randint(120, 210, 300), inplace =True)
 
     # resprate_apache - Normal Value in Range
     df['resprate_apache'].fillna(random.randint(12, 16), inplace =True)
