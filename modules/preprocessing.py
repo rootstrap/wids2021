@@ -13,13 +13,12 @@ class PreprocessingModule():
 
   def df_preprocessing(self, df, disable_h1=False, disable_d1=False, null_tolerance=100, onehot=False, 
     drop_columns=[], columns_to_keep=[]):
+    # Dropping unused columns
+    df.drop(drop_columns, axis = 1, inplace=True)
     if len(columns_to_keep) > 0:
         drop_columns = [column for column in df.columns if column not in columns_to_keep]
         df.drop(drop_columns, axis=1, inplace=True)
     else:
-        # Dropping unused columns
-        df.drop(drop_columns, axis = 1, inplace=True)
-
         # Dropping by null %, d1, h1
         for column in df.columns:
             total_nulls = df[column].isnull().sum()
