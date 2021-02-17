@@ -111,7 +111,7 @@ class PreprocessingModule():
         df = df.drop('ethnicity',axis = 1)
         df = df.join(one_hot)
         one_hot = pd.get_dummies(df['gender'], drop_first=True)
-        df = df.drop('ethnicity',axis = 1)
+        df = df.drop('gender',axis = 1)
         df = df.join(one_hot)
     else:
         df['ethnicity'] = df['ethnicity'].astype('category')
