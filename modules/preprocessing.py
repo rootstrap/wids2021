@@ -118,7 +118,7 @@ class PreprocessingModule():
 
     # apache_3j_diagnosis - Normal Value in Range
     df['apache_3j_diagnosis'].fillna(random.randint(100, 200), inplace =True)
-    df['apache_2_diagnosis'].fillna(np.choice([110, 210, 300]), p=[0.55, 0.05, 0.4] inplace =True)
+    df['apache_2_diagnosis'].fillna(np.choice([110, 210, 300]), p=[0.55, 0.05, 0.4], inplace =True)
 
     # resprate_apache - Normal Value in Range
     df['resprate_apache'].fillna(random.randint(12, 16), inplace =True)
