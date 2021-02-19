@@ -117,15 +117,15 @@ class PreprocessingModule():
       df['urineoutput_apache'].fillna(lambda x: random.randint(1200, 1800), inplace =True)
 
     if (onehot):
-    one_hot = pd.get_dummies(df['ethnicity'], drop_first=True)
-    df = df.drop('ethnicity',axis = 1)
-    df = df.join(one_hot)
-    one_hot = pd.get_dummies(df['gender'], drop_first=True)
-    df = df.drop('gender',axis = 1)
-    df = df.join(one_hot)
-else:
-    df['ethnicity'] = df['ethnicity'].astype('category')
-    df['gender'] = df['gender'].astype('category')
+        one_hot = pd.get_dummies(df['ethnicity'], drop_first=True)
+        df = df.drop('ethnicity',axis = 1)
+        df = df.join(one_hot)
+        one_hot = pd.get_dummies(df['gender'], drop_first=True)
+        df = df.drop('gender',axis = 1)
+        df = df.join(one_hot)
+    else:
+        df['ethnicity'] = df['ethnicity'].astype('category')
+        df['gender'] = df['gender'].astype('category')
 
   
     # High correlations
