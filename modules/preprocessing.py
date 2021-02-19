@@ -63,7 +63,7 @@ class PreprocessingModule():
       if column in df.columns:
         df[column].fillna((df[column].mode().iloc[0]), inplace=True)
 
-    # Fill ethnicity - proportion distribution? + OneHot
+    # Fill ethnicity - proportion distribution
     proportion = df['ethnicity'].value_counts(normalize=True)
     df['ethnicity'] = df['ethnicity'].fillna(pd.Series(np.random.choice(proportion.keys(), p=proportion.values, size=len(df))))
 
@@ -71,22 +71,11 @@ class PreprocessingModule():
 
     # gender - fill by proportion
     df['gender'] = df['gender'].fillna(pd.Series(np.random.choice(['M', 'F'], p=[0.5, 0.5], size=len(df))))
-    if (onehot):
-        one_hot = pd.get_dummies(df['ethnicity'], drop_first=True)
-        df = df.drop('ethnicity',axis = 1)
-        df = df.join(one_hot)
-        one_hot = pd.get_dummies(df['gender'], drop_first=True)
-        df = df.drop('gender',axis = 1)
-        df = df.join(one_hot)
-    else:
-        df['ethnicity'] = df['ethnicity'].astype('category')
-        df['gender'] = df['gender'].astype('category')
-
 
     # Other fillings
     # columns: age bmi ethnicity gender apache_3j_diagnosis resprate_apache urineoutput_apache
 
-    # Fill Null Age - proportion distribution?
+    # Fill Null Age - proportion distribution
     bins = pd.IntervalIndex.from_tuples([ (0, 20),(20, 40),(40, 60), (60,80), (80,100)])
     df['age_interval'] = pd.cut(df.age, bins)
     proportion = df['age_interval'].value_counts(normalize=True)
@@ -126,6 +115,18 @@ class PreprocessingModule():
     # urineoutput_apache - Normal Value
     if 'urineoutput_apache' in df.columns:
       df['urineoutput_apache'].fillna(lambda x: random.randint(1200, 1800), inplace =True)
+
+    if (onehot):
+    one_hot = pd.get_dummies(df['ethnicity'], drop_first=True)
+    df = df.drop('ethnicity',axis = 1)
+    df = df.join(one_hot)
+    one_hot = pd.get_dummies(df['gender'], drop_first=True)
+    df = df.drop('gender',axis = 1)
+    df = df.join(one_hot)
+else:
+    df['ethnicity'] = df['ethnicity'].astype('category')
+    df['gender'] = df['gender'].astype('category')
+
   
     # High correlations
     # bun_apache - Highly correlated (>0.9) removing d1, h1 ?
