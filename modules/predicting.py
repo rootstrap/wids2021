@@ -1,13 +1,18 @@
 from sklearn.model_selection import train_test_split
 import pandas as pd 
 
-class PredictingModule():
+class PredictingModule():  
   def split_data(self, df, test_size=0.2, val_size=0.25):
     X = df.drop(['diabetes_mellitus','encounter_id'], axis=1)
     y = pd.to_numeric(df['diabetes_mellitus'].values)
     X = pd.DataFrame(X, columns=df.drop(['diabetes_mellitus','encounter_id'], axis=1).columns)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_size, random_state=123)
-    X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=val_size, random_state=123)
+    if (val_size!=0):
+        X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=val_size, random_state=123)
+    else:
+        X_val = []
+        y_val = []
+
     return X_train, X_val, X_test, y_train, y_val, y_test
 
   def predict_probabilities(self, model, X_train, X_val, y_train, y_val, X_test, y_test):
