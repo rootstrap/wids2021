@@ -13,18 +13,7 @@ class PreprocessingModule():
 
   def df_preprocessing(self, df, disable_h1=False, disable_d1=False, null_tolerance=100, onehot=False, 
     drop_columns=[], columns_to_keep=[]):
-    # Dropping unused columns
-    df.drop(drop_columns, axis = 1, inplace=True)
-    if len(columns_to_keep) > 0:
-        drop_columns = [column for column in df.columns if column not in columns_to_keep]
-        df.drop(drop_columns, axis=1, inplace=True)
-    else:
-        # Dropping by null %, d1, h1
-        for column in df.columns:
-            total_nulls = df[column].isnull().sum()
-            nulls_percentage = (total_nulls*100)/df.shape[0]
-            if (disable_h1 and self.is_h1(column)) or (disable_d1 and self.is_d1(column)) or (null_tolerance <= nulls_percentage):
-                df.drop(column, axis=1, inplace=True)
+    
 
     # Filling by mean
     # columns= albumin_apache bilirubin_apache glucose_apache hematocrit_apache sodium_apache urineoutput_apache
@@ -93,6 +82,7 @@ class PreprocessingModule():
     ]
     choices=[df['bmi'], male_mean, female_mean]
     df['bmi'] = df['bmi'].fillna(pd.Series(np.select(conditions, choices, default=bmi_mean)))
+   
     male_mean = df.groupby('gender')['weight'].mean()['M']
     female_mean = df.groupby('gender')['weight'].mean()['F']
     conditions = [
@@ -103,6 +93,18 @@ class PreprocessingModule():
     choices=[df['weight'], male_mean, female_mean]
     weight_mean = df['weight'].mean()
     df['weight'] = df['weight'].fillna(pd.Series(np.select(conditions, choices, default=weight_mean)))
+
+    male_mean = df.groupby('gender')['height'].mean()['M']
+    female_mean = df.groupby('gender')['height'].mean()['F']
+    conditions = [
+      df['height'].notnull(),
+      df['gender']=='M',
+      df['gender']=='F',
+    ]
+    choices=[df['height'], male_mean, female_mean]
+    height_mean = df['height'].mean()
+    df['height'] = df['height'].fillna(pd.Series(np.select(conditions, choices, default=height_mean)))
+
 
     
     # apache_3j_diagnosis - Normal Value in Range
@@ -127,6 +129,18 @@ class PreprocessingModule():
         df['ethnicity'] = df['ethnicity'].astype('category')
         df['gender'] = df['gender'].astype('category')
 
+    # Dropping unused columns
+    df.drop(drop_columns, axis = 1, inplace=True)
+    if len(columns_to_keep) > 0:
+        drop_columns = [column for column in df.columns if column not in columns_to_keep]
+        df.drop(drop_columns, axis=1, inplace=True)
+    else:
+        # Dropping by null %, d1, h1
+        for column in df.columns:
+            total_nulls = df[column].isnull().sum()
+            nulls_percentage = (total_nulls*100)/df.shape[0]
+            if (disable_h1 and self.is_h1(column)) or (disable_d1 and self.is_d1(column)) or (null_tolerance <= nulls_percentage):
+                df.drop(column, axis=1, inplace=True)
   
     # High correlations
     # bun_apache - Highly correlated (>0.9) removing d1, h1 ?
