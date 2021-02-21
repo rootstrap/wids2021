@@ -130,6 +130,15 @@ class PreprocessingModule():
         if 'urineoutput_apache' in df.columns:
           df['urineoutput_apache'].fillna(lambda x: random.randint(1200, 1800), inplace =True)
 
+        
+        # Dropping unused columns
+
+        if len(columns_to_keep) > 0:
+            drop_columns = [column for column in drop_columns if column not in columns_to_keep]
+
+        df.drop(drop_columns, axis = 1, inplace=True)
+
+        # transform categorical cols
         categorical_cols = [c for c in df.columns if df[c].dtype == 'object']    
           
         if (onehot):
@@ -142,15 +151,6 @@ class PreprocessingModule():
         else:
             df['ethnicity'] = df['ethnicity'].astype('category')
             df['gender'] = df['gender'].astype('category')
-
-        # transform categorical columns
-
-        # Dropping unused columns
-
-        if len(columns_to_keep) > 0:
-            drop_columns = [column for column in drop_columns if column not in columns_to_keep]
-
-        df.drop(drop_columns, axis = 1, inplace=True)
 
         # High correlations
         # bun_apache - Highly correlated (>0.9) removing d1, h1 ?
