@@ -12,10 +12,10 @@ class PreprocessingModule():
       return bool(pattern.match(str(column)))
   
   def transform_one_hot(self, df, col):
-     one_hot = pd.get_dummies(df[col], drop_first=True)
-     df = df.drop(c,axis = 1)
-     df = df.join(one_hot)
-     return df   
+      one_hot = pd.get_dummies(df[col], drop_first=True)
+      df = df.drop(c,axis = 1)
+      df = df.join(one_hot)
+      return df   
 
   def df_preprocessing(self, df, disable_h1=False, disable_d1=False, null_tolerance=100, onehot=False, 
     drop_columns=[], columns_to_keep=[]):
