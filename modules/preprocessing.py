@@ -11,6 +11,12 @@ class PreprocessingModule():
       pattern = re.compile("d1*")
       return bool(pattern.match(str(column)))
 
+   def transform_one_hot(df, col):
+        one_hot = pd.get_dummies(df[col], drop_first=True)
+        df = df.drop(c,axis = 1)
+        df = df.join(one_hot)
+        return df   
+
   def df_preprocessing(self, df, disable_h1=False, disable_d1=False, null_tolerance=100, onehot=False, 
     drop_columns=[], columns_to_keep=[]):
     
@@ -125,17 +131,21 @@ class PreprocessingModule():
     if 'urineoutput_apache' in df.columns:
       df['urineoutput_apache'].fillna(lambda x: random.randint(1200, 1800), inplace =True)
 
+    categorical_cols = [c for c in df.columns if df[c].dtype == 'object']    
+      
     if (onehot):
-        one_hot = pd.get_dummies(df['ethnicity'], drop_first=True)
-        df = df.drop('ethnicity',axis = 1)
-        df = df.join(one_hot)
-        one_hot = pd.get_dummies(df['gender'], drop_first=True)
-        df = df.drop('gender',axis = 1)
-        df = df.join(one_hot)
+        for c in categorical_cols:
+            df = transform_one_hot(df, c)
+            if 'ethnicity' not in categorical_cols:
+                df = transform_one_hot(df, 'ethnicity')
+            if 'gender' not in categorical_cols:
+                df = transform_one_hot(df, 'gender')
     else:
         df['ethnicity'] = df['ethnicity'].astype('category')
         df['gender'] = df['gender'].astype('category')
 
+    # transform categorical columns
+    
     # Dropping unused columns
     
     if len(columns_to_keep) > 0:
@@ -151,4 +161,4 @@ class PreprocessingModule():
     # df = df.drop(['d1_creatinine_min', 'd1_creatinine_max', 'h1_creatinine_min', 'h1_creatinine_max'], axis=1)
 
 
-    return df
+    return df, categorical_cols
