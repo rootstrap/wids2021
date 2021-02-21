@@ -24,7 +24,7 @@ class PreprocessingModule():
             total_nulls = df[column].isnull().sum()
             nulls_percentage = (total_nulls*100)/df.shape[0]
             if (disable_h1 and self.is_h1(column)) or (disable_d1 and self.is_d1(column)) or (null_tolerance <= nulls_percentage):
-                drop_columns.append(column, axis=1)
+                drop_columns.append(column)
 
 
         # Filling by mean
