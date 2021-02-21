@@ -3,23 +3,23 @@ import pandas as pd
 import random, re
 
 class PreprocessingModule():
-  def is_h1(self, column):
-      pattern = re.compile("h1*")
-      return bool(pattern.match(str(column)))
+    def is_h1(self, column):
+        pattern = re.compile("h1*")
+        return bool(pattern.match(str(column)))
 
-  def is_d1(self, column):
-      pattern = re.compile("d1*")
-      return bool(pattern.match(str(column)))
-  
-  def transform_one_hot(self, df, col):
-      one_hot = pd.get_dummies(df[col], drop_first=True)
-      df = df.drop(c,axis = 1)
-      df = df.join(one_hot)
-      return df   
+    def is_d1(self, column):
+        pattern = re.compile("d1*")
+        return bool(pattern.match(str(column)))
 
-   def df_preprocessing(self, df, disable_h1=False, disable_d1=False, null_tolerance=100, onehot=False, 
-    drop_columns=[], columns_to_keep=[]):
-       # add drop columns by null %, d1, h1
+    def transform_one_hot(self, df, col):
+        one_hot = pd.get_dummies(df[col], drop_first=True)
+        df = df.drop(c,axis = 1)
+        df = df.join(one_hot)
+        return df   
+
+    def df_preprocessing(self, df, disable_h1=False, disable_d1=False, null_tolerance=100, onehot=False, 
+        drop_columns=[], columns_to_keep=[]):
+        # add drop columns by null %, d1, h1
         for column in df.columns:
             total_nulls = df[column].isnull().sum()
             nulls_percentage = (total_nulls*100)/df.shape[0]
