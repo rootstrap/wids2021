@@ -143,11 +143,11 @@ class PreprocessingModule():
           
         if (onehot):
             for c in categorical_cols:
-                df = transform_one_hot(df, c)
+                df = self.transform_one_hot(df, c)
                 if 'ethnicity' not in categorical_cols:
-                    df = transform_one_hot(df, 'ethnicity')
+                    df = self.transform_one_hot(df, 'ethnicity')
                 if 'gender' not in categorical_cols:
-                    df = transform_one_hot(df, 'gender')
+                    df = self.transform_one_hot(df, 'gender')
         else:
             df['ethnicity'] = df['ethnicity'].astype('category')
             df['gender'] = df['gender'].astype('category')
