@@ -134,12 +134,7 @@ class PreprocessingModule():
         # Dropping unused columns
 
         if len(columns_to_keep) > 0:
-            for c in drop_columns:
-                print(c)
             drop_columns = [column for column in drop_columns if column not in columns_to_keep]
-            print('after')
-            for c in drop_columns:
-                print(c)
 
         df.drop(drop_columns, axis = 1, inplace=True)
 
