@@ -15,7 +15,7 @@ class PredictingModule():
 
     return X_train, X_val, X_test, y_train, y_val, y_test
 
-  def predict_probabilities(self, model, X_train, X_val, y_train, y_val, X_test, y_test):
+  def predict_probabilities(self, model, X_train, X_val, y_train, y_val, X_test, y_test, validation_set=True):
     y_train_pred = model.predict_proba(X_train)
     df_train_pred = pd.DataFrame()
     df_train_pred['probability'] = y_train_pred[:,1]
@@ -23,7 +23,7 @@ class PredictingModule():
     df_train_pred['real_value'] = y_train
 
     df_val_pred = pd.DataFrame()
-    if (X_val!=[]):
+    if (validation_set):
         y_val_pred = model.predict_proba(X_val)
         df_val_pred['probability'] = y_val_pred[:,1]
         df_val_pred['predicted_value'] = df_val_pred['probability'].apply(lambda x: 1 if x>0.5 else 0)
