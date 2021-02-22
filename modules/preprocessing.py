@@ -13,7 +13,7 @@ class PreprocessingModule():
 
     def transform_one_hot(self, df, col):
         one_hot = pd.get_dummies(df[col], drop_first=True)
-        df = df.drop(c,axis = 1)
+        df = df.drop(col,axis = 1)
         df = df.join(one_hot)
         return df   
 
