@@ -120,7 +120,7 @@ class PreprocessingModule():
 
 
         # apache_3j_diagnosis - Normal Value in Range
-        df['apache_3j_diagnosis'].fillna(random.randint(100, 200), inplace =True)
+        df['apache_3j_diagnosis'].fillna(-100, inplace =True)
         df['apache_2_diagnosis'] = df['apache_2_diagnosis'].fillna(pd.Series(np.random.choice([110, 210, 300], p=[0.55, 0.05, 0.4], size=len(df))))
 
         # resprate_apache - Normal Value in Range
@@ -139,25 +139,19 @@ class PreprocessingModule():
         df.drop(drop_columns, axis = 1, inplace=True)
 
         # transform categorical cols
-        categorical_cols = [c for c in df.columns if df[c].dtype == 'object']    
+        categorical_cols = []
+        for c in df.columns:
+            col_type = df[c].dtype
+            if (col_type == 'object' or col_type.name == 'category'):
+                    categorical_cols.append(c)
+                    df[c] = df[c].astype('category')            
           
         if (onehot):
             for c in categorical_cols:
                 df = self.transform_one_hot(df, c)
-                if 'ethnicity' not in categorical_cols:
-                    df = self.transform_one_hot(df, 'ethnicity')
-                if 'gender' not in categorical_cols:
-                    df = self.transform_one_hot(df, 'gender')
         else:
             df['ethnicity'] = df['ethnicity'].astype('category')
             df['gender'] = df['gender'].astype('category')
 
-        # High correlations
-        # bun_apache - Highly correlated (>0.9) removing d1, h1 ?
-        # df = df.drop(['d1_bun_min', 'd1_bun_max', 'h1_bun_min', 'h1_bun_max'], axis=1)
-
-        # creatinine_apache - Highly correlated (>0.9) removing d1, h1 ?
-        # df = df.drop(['d1_creatinine_min', 'd1_creatinine_max', 'h1_creatinine_min', 'h1_creatinine_max'], axis=1)
-
-
+       
         return df, categorical_cols

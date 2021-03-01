@@ -1,1 +1,10 @@
 .DS_Store
+
+.idea/
+.ipynb_checkpoints/
+TrainingWiDS2021.csv
+UnlabeledWiDS2021.csv
+modules/__pycache__/
+venv/
+
+
